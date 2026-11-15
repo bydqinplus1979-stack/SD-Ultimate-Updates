@@ -33,16 +33,21 @@ download_url=https://github.com/bydqinplus1979-stack/SD-Ultimate-Updates/release
 
 The detached signature is RSA-3072 / SHA256withRSA over the exact bytes of `manifest.txt`. Do not normalize line endings, reformat, or edit a signed manifest after signing.
 
-## Release sequence (not yet authorized for production)
+## Release sequence
 
 1. Build from the reviewed source commit in the protected release environment.
 2. Verify package ID, versionCode/versionName, APK signer certificate, APK size, and SHA-256.
 3. Create the canonical manifest using those measured values.
 4. Sign the exact manifest bytes with the offline manifest-signing private key; never upload that key.
 5. Upload the APK as a versioned GitHub Release asset and publish the matching manifest and detached signature.
-6. Independently download all three public artifacts and verify the signature, digest, package, version, and signer before enabling the client channel.
+6. Independently download the public metadata and verify the signature, digest, package, version, and signer before enabling the client channel.
 7. Test the complete Android PackageInstaller user-confirmation flow on an isolated emulator and then a controlled device. A system confirmation must be shown; no silent/root fallback.
 
-## Current state
+## Current state — version 1.0.53
 
-This file defines the protocol only. The stable manifest and signature are intentionally absent until a real signed APK release has passed all gates. No production update is currently available.
+- The APK `SD-Ultimate-1.0.53.apk` is published under GitHub Release tag `v1.0.53`.
+- The canonical manifest and detached signature are published at the fixed stable-channel endpoints.
+- The manifest is 470 bytes; the detached RSA-3072 signature is 384 bytes.
+- The manifest SHA-256 is `6250844719902eb1c6c53be7d8837c0c1d11fb154b9e94b88cdb1d55fd1d8438`.
+- A separate download of both metadata files from the raw-content endpoints passed local verification with the pinned public key (`Verified OK`).
+- The complete in-app updater integration and controlled-device installation cycle are still pending verification. Do not describe the complete updater as production-ready until those gates pass.
